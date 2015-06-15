@@ -3,26 +3,15 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 
-var SITE_NAME_KEY = 'siteName'
+var SITE_NAME_KEY = 'siteName';
+var INCLUDE_API_KEY = 'includeApi';
+var INCLUDE_WEB_APP = 'includeWebApp';
 
 module.exports = yeoman.generators.Base.extend({
   prompting: function () {
     var done = this.async();
 
-    var prompts = [{
-      type: 'checkbox',
-      name: 'features',
-      message: 'Please choose required components',
-      choices: [{
-        name: 'WebApp',
-        value: 'includeWebApp',
-        checked: false
-      }, {
-        name: 'Api',
-        value: 'includeApi',
-        checked: false
-      }]
-    }];
+    var prompts = [];
 
     var siteName = this.config.get(SITE_NAME_KEY);
     if (siteName) {
@@ -31,22 +20,65 @@ module.exports = yeoman.generators.Base.extend({
       prompts.push({
         name: SITE_NAME_KEY,
         message: 'What would you like to name your project?',
-        default: this.appName
+        default: 'My Project'
       });
     }
 
+    var componentsPrompt = {
+      type: 'checkbox',
+      name: 'features',
+      message: 'Please choose required components',
+      choices: []
+    };
+
+    if (this.config.get(INCLUDE_API_KEY)) {
+      this.log('Api already added.');
+    } else {
+      componentsPrompt.choices.push({
+        name: 'Api',
+        value: INCLUDE_API_KEY,
+        checked: false
+      });
+    }
+
+    if (this.config.get(INCLUDE_WEB_APP)) {
+      this.log('Web App already added.');
+    } else {
+      componentsPrompt.choices.push({
+        name: 'Web App',
+        value: INCLUDE_WEB_APP,
+        checked: false
+      });
+    }
+
+    if (componentsPrompt.choices.length != 0) {
+      prompts.push(componentsPrompt);
+    }
+
+    if (prompts.length == 0) {
+      this.log(chalk.green('All components are already added.'));
+      return;
+    }
 
     this.prompt(prompts, function (props) {
-      var features = props.features;
+      var config = this.config;
+
+      function setConfigIfValuePresent(key, value) {
+        if (value) {
+          config.set(key, value);
+        }
+      }
 
       function hasFeature(feat) {
         return features.indexOf(feat) !== -1;
       }
 
-      this.config.set(SITE_NAME_KEY, props.sitename);
-      this.config.set('includeWebApp', hasFeature('includeWebApp'));
-      this.config.set('includeApi', hasFeature('includeApi'));
-      this.config.save();
+      var features = props.features;
+
+      setConfigIfValuePresent(SITE_NAME_KEY, props.siteName);
+      setConfigIfValuePresent(INCLUDE_WEB_APP, hasFeature(INCLUDE_WEB_APP));
+      setConfigIfValuePresent(INCLUDE_API_KEY, hasFeature(INCLUDE_API_KEY));
+      config.save();
 
       done();
     }.bind(this));
