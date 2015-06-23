@@ -66,7 +66,9 @@ module.exports = yeoman.generators.Base.extend({
       function setConfigIfValuePresent(key, value) {
         if (value) {
           config.set(key, value);
+          return true;
         }
+        return false;
       }
 
       function hasFeature(feat) {
@@ -76,8 +78,12 @@ module.exports = yeoman.generators.Base.extend({
       var features = props.features;
 
       setConfigIfValuePresent(SITE_NAME_KEY, props.siteName);
-      setConfigIfValuePresent(INCLUDE_WEB_APP, hasFeature(INCLUDE_WEB_APP));
-      setConfigIfValuePresent(INCLUDE_API_KEY, hasFeature(INCLUDE_API_KEY));
+      if (setConfigIfValuePresent(INCLUDE_WEB_APP, hasFeature(INCLUDE_WEB_APP))) {
+        this.composeWith('web-booster:web-app');
+      }
+      if (setConfigIfValuePresent(INCLUDE_API_KEY, hasFeature(INCLUDE_API_KEY))) {
+        this.composeWith('web-booster:api');
+      }
       config.save();
 
       done();
