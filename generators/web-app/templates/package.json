@@ -18,5 +18,6 @@
     "main-bower-files": "^2.8.0",
     "rimraf": "^2.3.4",
     "tsd": "^0.6.0-beta.5"
-  }
+  },
+  "scripts": {"install": "bower install"}
 }
