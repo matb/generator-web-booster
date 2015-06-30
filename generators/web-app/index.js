@@ -1,16 +1,18 @@
 'use strict';
 var yeoman = require('yeoman-generator');
+var constants = require('../../shared/constants');
+var angularUtil = require('../../shared/angularUtil');
 
 module.exports = yeoman.generators.Base.extend({
   initializing: function () {
-
-    this.log('You called the MeanBoilerplate subgenerator with the argument ' + this.name + '.');
   },
 
   writing: function () {
-    this.fs.copy(
-      this.templatePath('somefile.js'),
-      this.destinationPath('somefile.js')
-    );
+    var project = this.config.get(constants.SITE_NAME_KEY);
+    this.fs.copyTpl(this.templatePath(), this.destinationPath('src/webapp'), {
+      project: project,
+      angularModule: angularUtil.toAngularModuleName(project)
+    });
   }
 });
+

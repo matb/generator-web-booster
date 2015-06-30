@@ -1,0 +1,8 @@
+# folder for compiled (transcompiled) outputs
+release
+
+# folder for releases
+dist
+
+bower_components
+

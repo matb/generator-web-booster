@@ -1,11 +1,8 @@
 'use strict';
 var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
-var yosay = require('yosay');
+var constants = require('../../shared/constants');
 
-var SITE_NAME_KEY = 'siteName';
-var INCLUDE_API_KEY = 'includeApi';
-var INCLUDE_WEB_APP = 'includeWebApp';
 
 module.exports = yeoman.generators.Base.extend({
   prompting: function () {
@@ -13,12 +10,12 @@ module.exports = yeoman.generators.Base.extend({
 
     var prompts = [];
 
-    var siteName = this.config.get(SITE_NAME_KEY);
+    var siteName = this.config.get(constants.SITE_NAME_KEY);
     if (siteName) {
       this.log('Project name is ' + chalk.green(siteName) + '.');
     } else {
       prompts.push({
-        name: SITE_NAME_KEY,
+        name: constants.SITE_NAME_KEY,
         message: 'What would you like to name your project?',
         default: 'My Project'
       });
@@ -31,22 +28,22 @@ module.exports = yeoman.generators.Base.extend({
       choices: []
     };
 
-    if (this.config.get(INCLUDE_API_KEY)) {
+    if (this.config.get(constants.INCLUDE_API_KEY)) {
       this.log('Api already added.');
     } else {
       componentsPrompt.choices.push({
         name: 'Api',
-        value: INCLUDE_API_KEY,
+        value: constants.INCLUDE_API_KEY,
         checked: false
       });
     }
 
-    if (this.config.get(INCLUDE_WEB_APP)) {
+    if (this.config.get(constants.INCLUDE_WEB_APP)) {
       this.log('Web App already added.');
     } else {
       componentsPrompt.choices.push({
         name: 'Web App',
-        value: INCLUDE_WEB_APP,
+        value: constants.INCLUDE_WEB_APP,
         checked: false
       });
     }
@@ -77,11 +74,11 @@ module.exports = yeoman.generators.Base.extend({
 
       var features = props.features;
 
-      setConfigIfValuePresent(SITE_NAME_KEY, props.siteName);
-      if (setConfigIfValuePresent(INCLUDE_WEB_APP, hasFeature(INCLUDE_WEB_APP))) {
+      setConfigIfValuePresent(constants.SITE_NAME_KEY, props.siteName);
+      if (setConfigIfValuePresent(constants.INCLUDE_WEB_APP, hasFeature(constants.INCLUDE_WEB_APP))) {
         this.composeWith('web-booster:web-app');
       }
-      if (setConfigIfValuePresent(INCLUDE_API_KEY, hasFeature(INCLUDE_API_KEY))) {
+      if (setConfigIfValuePresent(constants.INCLUDE_API_KEY, hasFeature(constants.INCLUDE_API_KEY))) {
         this.composeWith('web-booster:api');
       }
       config.save();
@@ -92,26 +89,11 @@ module.exports = yeoman.generators.Base.extend({
 
   writing: {
     app: function () {
-      this.fs.copy(
-        this.templatePath('_package.json'),
-        this.destinationPath('package.json')
-      );
-      this.fs.copy(
-        this.templatePath('_bower.json'),
-        this.destinationPath('bower.json')
-      );
+      this.fs.copyTpl(this.templatePath('_package.json'), this.destinationPath('package.json'), {project: this.config.get(constants.SITE_NAME_KEY)});
+      this.fs.copyTpl(this.templatePath('src'), this.destinationPath('src'), {project: this.config.get(constants.SITE_NAME_KEY)});
+      this.fs.copyTpl(this.templatePath('util'), this.destinationPath('util'), {project: this.config.get(constants.SITE_NAME_KEY)});
+      this.fs.copyTpl(this.templatePath('idea'), this.destinationPath('.idea'), {project: this.config.get(constants.SITE_NAME_KEY)});
     },
-
-    projectfiles: function () {
-      this.fs.copy(
-        this.templatePath('editorconfig'),
-        this.destinationPath('.editorconfig')
-      );
-      this.fs.copy(
-        this.templatePath('jshintrc'),
-        this.destinationPath('.jshintrc')
-      );
-    }
   },
 
   install: function () {

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" data-framework="angularjs">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title><%= project %></title>
+    <!-- build:vendorCss(./) css/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+    <!-- endinject -->
+    <!-- endbuild -->
+
+    <!-- build:appCss(./release/css/) css/app.css -->
+    <!-- inject:css -->
+    <link rel="stylesheet" href="/commonAssets/css/app.css">
+    <!-- endinject -->
+    <!-- endbuild -->
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <base href="/"/>
+</head>
+
+<body ng-app="<%= angularModule %>">
+
+<div id="wrapper" ng-controller="appCtrl as app">
+    {{app.foo}}
+    <div id="page-wrapper">
+        <ng-view></ng-view>
+    </div>
+</div>
+<!-- /#wrapper -->
+
+<!-- build:vendorJs(./) js/vendor.js -->
+<!-- bower:js -->
+<!-- endinject -->
+<!-- endbuild -->
+
+<!-- build:appJs(./release/js/) js/app.js -->
+<!-- inject:js -->
+<!-- endinject -->
+<!-- endbuild -->
+
+</body>
+
+</html>

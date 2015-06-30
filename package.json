@@ -9,7 +9,7 @@
     "url": "https://github.com/someuser"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "files": [
     "generators"
@@ -23,6 +23,7 @@
     "yosay": "^1.0.2"
   },
   "devDependencies": {
+    "chai": "^3.0.0",
     "mocha": "*"
   }
 }

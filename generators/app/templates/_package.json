@@ -1,5 +1,6 @@
 {
-  "name": "package",
-  "version": "0.0.0",
-  "dependencies": {}
+  "name": "<%= project %>",
+  "version": "0.0.1",
+  "scripts": {"install": "bash ./util/scripts/npm_install.sh"}
 }
+
