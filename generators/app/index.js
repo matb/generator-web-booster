@@ -91,6 +91,7 @@ module.exports = yeoman.generators.Base.extend({
     app: function () {
       this.fs.copyTpl(this.templatePath('_package.json'), this.destinationPath('package.json'), {project: this.config.get(constants.SITE_NAME_KEY)});
       this.fs.copyTpl(this.templatePath('_readme.md'), this.destinationPath('readme.md'), {project: this.config.get(constants.SITE_NAME_KEY)});
+      this.fs.copyTpl(this.templatePath('_gitignore'), this.destinationPath('.gitignore'), {project: this.config.get(constants.SITE_NAME_KEY)});
       this.fs.copyTpl(this.templatePath('src'), this.destinationPath('src'), {project: this.config.get(constants.SITE_NAME_KEY)});
       this.fs.copyTpl(this.templatePath('util'), this.destinationPath('util'), {project: this.config.get(constants.SITE_NAME_KEY)});
       this.fs.copyTpl(this.templatePath('idea'), this.destinationPath('.idea'), {project: this.config.get(constants.SITE_NAME_KEY)});
